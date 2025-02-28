@@ -95,16 +95,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if (loginSection) {
     loginSection.classList.remove("show");
     loginSection.classList.add("hidden");
+    document.body.classList.remove("no-scroll");
   }
 
   const loginNavItem = document.getElementById("nav-login");
-  const projectsNavItem = document.querySelector('nav a[href="#portfolio"]');
+  const projectsNavItem = document.getElementById("nav-projets");
 
   if (loginNavItem) {
     loginNavItem.addEventListener("click", (event) => {
       event.preventDefault();
       loginSection.classList.remove("hidden");
       loginSection.classList.add('show');
+
+      // Bloque le scroll
+      document.body.classList.add("no-scroll");
     });
   }
 
@@ -113,6 +117,9 @@ document.addEventListener("DOMContentLoaded", () => {
     projectsNavItem.addEventListener("click", () => {
       loginSection.classList.remove("show");
       loginSection.classList.add("hidden");
+
+      // Réactive le scroll
+      document.body.classList.remove("no-scroll");
     });
   }
 });

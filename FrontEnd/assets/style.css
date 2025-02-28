@@ -183,6 +183,11 @@ border-color: #1D6154;
 ========== LOGIN ==========
 ========================= */
 
+header {
+	position: relative;
+	z-index: 10000; /* supérieur à 9999 du z-index de #login */
+}  
+
 .hidden {
 	display: none;
 }
@@ -191,6 +196,10 @@ border-color: #1D6154;
 .show {
 	display: flex;
 }
+
+.no-scroll {
+	overflow: hidden;
+}  
 
 #login {
 	position: fixed;
@@ -205,32 +214,31 @@ border-color: #1D6154;
 	z-index: 9999;
 }
 
-  
-  #login h2 {
+#login h2 {
 	font-family: 'Syne';
 	color: #1D6154;
 	margin-bottom: 1.5rem;
-  }
+}
   
-  #login form {
+#login form {
 	display: flex;
 	flex-direction: column;
 	width: 300px;
-  }
+}
   
-  #login label {
+#login label {
 	margin: 1rem 0 0.3rem;
-  }
+}
   
-  #login input {
+#login input {
 	height: 40px;
 	font-size: 1rem;
 	padding: 0 1rem;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-  }
+}
   
-  #login button[type="submit"] {
+#login button[type="submit"] {
 	margin-top: 1.5rem;
 	padding: 0.7rem;
 	border: none;
@@ -240,13 +248,13 @@ border-color: #1D6154;
 	font-family: 'Syne';
 	font-weight: 700;
 	cursor: pointer;
-  }
+}
   
-  #forgotPassword {
+#forgotPassword {
 	text-align: center;
 	margin-top: 1rem;
 	font-size: 0.9rem;
 	color: #1D6154;
 	text-decoration: none;
-  }
+}
   

@@ -1,56 +1,9 @@
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
+/*************** GENERAL ***********************/
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}
-body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-/** end reset css**/
 body {
 	max-width: 1140px;
 	margin:auto;
-	font-family: 'Work Sans' ;
+	font-family: 'Work Sans', sans-serif;
 	font-size: 14px;
 }
 header {
@@ -121,6 +74,11 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+#portfolio{
+	margin: 8rem 0;
+}
+
 #portfolio h2 {
 	text-align: center;
 	margin-bottom: 1em;
@@ -186,3 +144,37 @@ footer nav ul {
 	margin: 2em
 }
 
+
+/* =========================
+========== FILTER ==========
+========================= */
+
+.filters {
+display: flex;
+justify-content: center;
+gap: 1rem;
+margin: 3rem 0;
+}
+
+.filters button {
+padding: 0.5em 1.5em;
+border: 2px solid #1D6154;
+border-radius: 30px;
+background-color: #fff;
+color: #1D6154;
+font-size: 1rem;
+cursor: pointer;
+transition: background-color 0.3s, color 0.3s; 
+}
+
+.filters button:hover {
+background-color: #0E2F28; 
+border: 2px solid #0E2F28;
+color: #fff;
+}
+
+.filters button.active {
+background-color: #1D6154;
+color: #fff;
+border-color: #1D6154;
+}

@@ -86,6 +86,38 @@ async function fetchWorks() {
     // Affiche tous les travaux au démarrage
     displayWorks(currentWorks);
   }
-  
+
+////////////////// LOGIN ////////////////// 
+document.addEventListener("DOMContentLoaded", () => {
+  const loginSection = document.getElementById("login");
+
+  // Masque la section login au chargement de la page
+  if (loginSection) {
+    loginSection.classList.remove("show");
+    loginSection.classList.add("hidden");
+  }
+
+  const loginNavItem = document.getElementById("nav-login");
+  const projectsNavItem = document.querySelector('nav a[href="#portfolio"]');
+
+  if (loginNavItem) {
+    loginNavItem.addEventListener("click", (event) => {
+      event.preventDefault();
+      loginSection.classList.remove("hidden");
+      loginSection.classList.add('show');
+    });
+  }
+
+  // Masque la section login pour afficher la gallerie
+  if (projectsNavItem) {
+    projectsNavItem.addEventListener("click", () => {
+      loginSection.classList.remove("show");
+      loginSection.classList.add("hidden");
+    });
+  }
+});
+///////////////////////////////////////////
+
+
   init();
   

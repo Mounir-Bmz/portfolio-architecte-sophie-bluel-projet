@@ -90,6 +90,9 @@ async function fetchWorks() {
 ////////////////// LOGIN ////////////////// 
 document.addEventListener("DOMContentLoaded", () => {
   const loginSection = document.getElementById("login");
+  const loginForm = document.getElementById("loginForm");
+  const loginNavItem = document.getElementById("nav-login");
+  const projectsNavItem = document.getElementById("nav-projets");
 
   // Masque la section login au chargement de la page
   if (loginSection) {
@@ -98,33 +101,85 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.classList.remove("no-scroll");
   }
 
-  const loginNavItem = document.getElementById("nav-login");
-  const projectsNavItem = document.getElementById("nav-projets");
-
+  // Affiche la section login au clic sur "login"
   if (loginNavItem) {
     loginNavItem.addEventListener("click", (event) => {
       event.preventDefault();
       loginSection.classList.remove("hidden");
-      loginSection.classList.add('show');
-
-      // Bloque le scroll
+      loginSection.classList.add("show");
       document.body.classList.add("no-scroll");
     });
   }
 
-  // Masque la section login pour afficher la gallerie
+  // Masque la section login pour afficher la galerie
   if (projectsNavItem) {
     projectsNavItem.addEventListener("click", () => {
       loginSection.classList.remove("show");
       loginSection.classList.add("hidden");
-
-      // Réactive le scroll
       document.body.classList.remove("no-scroll");
+    });
+  }
+
+  // Gestion de la soumission du formulaire de connexion
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault(); // Empêche le rechargement de la page
+
+      // Récupère les valeurs des champs
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Crée l'objet pour la charge utile
+      const credentials = {
+        email: email,
+        password: password
+      };
+
+      try {
+        // Envoie la requête POST à l'API
+        const response = await fetch("http://localhost:5678/api/users/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(credentials)
+        });
+
+        // Vérifie la réponse
+        if (response.ok) {
+          const data = await response.json();
+          // Stocke le token dans localStorage
+          window.localStorage.setItem("authToken", data.token);
+          
+          // Masque la section login et redirige vers la page d'accueil
+          loginSection.classList.remove("show");
+          loginSection.classList.add("hidden");
+          document.body.classList.remove("no-scroll");
+          window.location.href = "/"; // Redirection vers la page d'accueil
+        } else {
+          // Affiche un message d'erreur
+          const errorMessage = document.createElement("p");
+          errorMessage.textContent = "Erreur : Email ou mot de passe incorrect";
+          errorMessage.style.color = "red";
+          errorMessage.style.textAlign = "center";
+          // Supprime un ancien message d'erreur s'il existe
+          const oldError = loginForm.querySelector("p");
+          if (oldError) oldError.remove();
+          loginForm.appendChild(errorMessage);
+        }
+      } catch (error) {
+        console.error("Erreur lors de la connexion :", error);
+        // Affiche un message d'erreur générique en cas de problème réseau
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "Erreur réseau. Veuillez réessayer.";
+        errorMessage.style.color = "red";
+        errorMessage.style.textAlign = "center";
+        const oldError = loginForm.querySelector("p");
+        if (oldError) oldError.remove();
+        loginForm.appendChild(errorMessage);
+      }
     });
   }
 });
 ///////////////////////////////////////////
 
-
-  init();
+init();
   

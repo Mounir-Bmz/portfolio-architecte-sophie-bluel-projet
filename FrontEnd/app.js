@@ -93,26 +93,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const loginNavItem = document.getElementById("nav-login");
   const projectsNavItem = document.getElementById("nav-projets");
+  const token = window.localStorage.getItem("authToken");
 
-  // Masque la section login au chargement de la page
-  if (loginSection) {
+  if (token) {
+    // État connecté : ajuste l’interface
+    loginNavItem.textContent = "logout"; // Change "login" en "logout"
+    loginNavItem.addEventListener("click", () => {
+      window.localStorage.removeItem("authToken"); // Déconnexion
+      window.location.reload(); // Recharge pour revenir à l’état déconnecté
+    });
+    // Ajoute le bandeau et le bouton modifier (voir étape 5)
+  } else {
+    // État déconnecté
     loginSection.classList.remove("show");
     loginSection.classList.add("hidden");
     document.body.classList.remove("no-scroll");
-  }
 
-  // Affiche la section login au clic sur "login"
-  if (loginNavItem) {
     loginNavItem.addEventListener("click", (event) => {
       event.preventDefault();
       loginSection.classList.remove("hidden");
       loginSection.classList.add("show");
       document.body.classList.add("no-scroll");
     });
-  }
 
-  // Masque la section login pour afficher la galerie
-  if (projectsNavItem) {
     projectsNavItem.addEventListener("click", () => {
       loginSection.classList.remove("show");
       loginSection.classList.add("hidden");
@@ -130,10 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("password").value;
 
       // Crée l'objet pour la charge utile
-      const credentials = {
-        email: email,
-        password: password
-      };
+      const credentials = { email, password };
 
       try {
         // Envoie la requête POST à l'API
@@ -143,31 +143,27 @@ document.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify(credentials)
         });
 
+        const data = await response.json();
+
         // Vérifie la réponse
-        if (response.ok) {
-          const data = await response.json();
-          // Stocke le token dans localStorage
+        if (response.status === 200 || response.status === 201) {
           window.localStorage.setItem("authToken", data.token);
-          
-          // Masque la section login et redirige vers la page d'accueil
           loginSection.classList.remove("show");
           loginSection.classList.add("hidden");
           document.body.classList.remove("no-scroll");
-          window.location.href = "/"; // Redirection vers la page d'accueil
+          window.location.reload(); // Recharge la page pour appliquer la logique connectée
         } else {
-          // Affiche un message d'erreur
+          // Gestion des erreurs
           const errorMessage = document.createElement("p");
           errorMessage.textContent = "Erreur : Email ou mot de passe incorrect";
           errorMessage.style.color = "red";
           errorMessage.style.textAlign = "center";
-          // Supprime un ancien message d'erreur s'il existe
           const oldError = loginForm.querySelector("p");
           if (oldError) oldError.remove();
           loginForm.appendChild(errorMessage);
         }
       } catch (error) {
         console.error("Erreur lors de la connexion :", error);
-        // Affiche un message d'erreur générique en cas de problème réseau
         const errorMessage = document.createElement("p");
         errorMessage.textContent = "Erreur réseau. Veuillez réessayer.";
         errorMessage.style.color = "red";

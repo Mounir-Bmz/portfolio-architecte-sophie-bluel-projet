@@ -96,18 +96,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const token = window.localStorage.getItem("authToken");
 
   if (token) {
-    // État connecté : ajuste l’interface
-    loginNavItem.textContent = "logout"; // Change "login" en "logout"
+    loginNavItem.textContent = "logout";
+    document.getElementById("admin-banner").classList.remove("hidden");
+    document.getElementById("edit-projects").classList.remove("hidden");
+    document.querySelector(".filters").classList.add("hidden");
     loginNavItem.addEventListener("click", () => {
-      window.localStorage.removeItem("authToken"); // Déconnexion
-      window.location.reload(); // Recharge pour revenir à l’état déconnecté
+      window.localStorage.removeItem("authToken");
+      window.location.reload();
     });
-    // Ajoute le bandeau et le bouton modifier (voir étape 5)
+    document.getElementById("edit-projects").addEventListener("click", () => {
+      alert("Mode édition activé !");
+    });
   } else {
-    // État déconnecté
     loginSection.classList.remove("show");
     loginSection.classList.add("hidden");
     document.body.classList.remove("no-scroll");
+    document.getElementById("admin-banner").classList.add("hidden");
+    document.getElementById("edit-projects").classList.add("hidden");
+    document.querySelector(".filters").classList.remove("hidden");
 
     loginNavItem.addEventListener("click", (event) => {
       event.preventDefault();

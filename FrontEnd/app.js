@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault(); // Empêche le rechargement de la page
 
       // Récupère les valeurs des champs
-      const email = document.getElementById("email").value;
+      const email = document.getElementById("login-email").value;
       const password = document.getElementById("password").value;
 
       // Crée l'objet pour la charge utile

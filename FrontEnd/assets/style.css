@@ -303,3 +303,130 @@ header {
 #admin-banner i {
 	margin-left: 8px;
 }
+
+/******************* MODAL **********************/
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 2.5rem;
+  border-radius: 1.25rem;
+  width: 50%;
+  max-width: 50rem;
+  aspect-ratio: 1 / 0.85;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+  height: 80vh;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-size: 2.5rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #000;
+}
+
+.modal-body {
+  margin-top: 0.75rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-content h3 {
+  font-size: 1.5rem;
+  margin: 0 0 0.75rem 0;
+  text-align: left;
+}
+
+.gallery-modal {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); /* Ajuste dynamiquement les colonnes */
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  max-height: calc(100% - 5rem);
+}
+
+.gallery-modal figure {
+  position: relative;
+  margin: 0;
+  border: 0.0625rem solid #eee;
+  background-color: #fff;
+  padding: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery-modal img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.delete-work {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  background-color: #fff;
+  border: 0.0625rem solid #000;
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #000;
+}
+
+#add-photo-btn, #back-to-gallery {
+  padding: 1rem 1.25rem;
+  background-color: #1D6154;
+  color: #fff;
+  border: none;
+  border-radius: 1.5625rem;
+  cursor: pointer;
+  margin-top: auto;
+  align-self: center;
+  width: 15rem;
+  font-size: 1.2rem;
+}
+
+#add-photo-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+#add-photo-form input {
+  margin: 0.625rem 0;
+  padding: 0.3125rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.25rem;
+}
+
+/************************************************/

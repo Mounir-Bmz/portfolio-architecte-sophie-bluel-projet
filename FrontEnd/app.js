@@ -76,15 +76,28 @@ function createAdminElements() {
   adminBanner.id = "admin-banner";
   adminBanner.innerHTML = '<i class="fas fa-pen-to-square"></i> Mode édition';
   adminBanner.classList.add("hidden");
-  document.body.insertBefore(adminBanner, document.querySelector("header"));
+
+  // Insère avant le <body> dans <html>
+  const body = document.querySelector("body");
+  document.documentElement.insertBefore(adminBanner, body); // Ajoute avant <body>
 
   // Crée le "modifier"
   const editProjects = document.createElement("div");
   editProjects.id = "edit-projects";
   editProjects.innerHTML = '<i class="fas fa-pen-to-square"></i> modifier';
   editProjects.classList.add("hidden");
+
   const portfolioSection = document.getElementById("portfolio");
-  portfolioSection.insertBefore(editProjects, portfolioSection.querySelector("h2"));
+  const h2 = portfolioSection.querySelector("h2");
+
+  // Crée un conteneur Flex pour h2 et edit-projects
+  const titleContainer = document.createElement("div");
+  titleContainer.classList.add("title-container");
+  
+  // Déplace h2 dans le conteneur et ajoute edit-projects
+  h2.parentNode.insertBefore(titleContainer, h2);
+  titleContainer.appendChild(h2);
+  titleContainer.appendChild(editProjects);
 }
 
 let currentWorks = [];

@@ -205,11 +205,9 @@ function createAdminElements() {
 
 //////////// MODAL //////////////////////////////////////////////////
 function createModal() {
-  // Vérifie et supprime une modale existante pour n’en avoir qu’une
   let modal = document.querySelector(".modal");
   if (modal) modal.remove();
 
-  // Crée la structure de la modale
   modal = document.createElement("div");
   modal.classList.add("modal", "hidden");
   modal.innerHTML = `
@@ -225,7 +223,6 @@ function createModal() {
   `;
   document.body.appendChild(modal);
 
-  // Remplit la galerie avec les travaux
   displayModalWorks(modal);
 
   // Gestion ouverture/fermeture
@@ -244,7 +241,6 @@ function createModal() {
     document.body.classList.remove("no-scroll");
   });
 
-  // Fermeture au clic sur l'overlay
   modal.addEventListener("click", (e) => {
     if (e.target === modal) {
       modal.classList.remove("show");
@@ -253,7 +249,6 @@ function createModal() {
     }
   });
 
-  // Gestion du bouton "Ajouter une photo"
   const addPhotoBtn = modal.querySelector("#add-photo-btn");
   addPhotoBtn.addEventListener("click", () => switchToAddPhotoView(modal));
 }
@@ -274,10 +269,6 @@ function displayModalWorks(modal) {
 
 function switchToAddPhotoView(modal) {
   const modalBody = modal.querySelector(".modal-body");
-
-  // Supprime tous les h3 existants
-  const existingH3 = modalBody.querySelectorAll("h3");
-  existingH3.forEach(h3 => h3.remove());
 
   modalBody.innerHTML = `
     <div class="modal-header">
@@ -343,17 +334,15 @@ function switchToAddPhotoView(modal) {
 function switchToGalleryView(modal) {
   const modalBody = modal.querySelector(".modal-body");
 
-  // Supprime tous les h3 existants
-  const existingH3 = modalBody.querySelectorAll("h3");
-  existingH3.forEach(h3 => h3.remove());
-
   modalBody.innerHTML = `
-    <h3>Galerie photo</h3>
+    <div class="modal-header">
+      <h3>Galerie photo</h3>
+    </div>
     <div class="gallery-modal"></div>
     <hr class="separator">
     <button id="add-photo-btn">Ajouter une photo</button>
   `;
-  displayModalWorks(modal); // Remplit à nouveau la galerie
+  displayModalWorks(modal);
   const addPhotoBtn = modalBody.querySelector("#add-photo-btn");
   addPhotoBtn.addEventListener("click", () => switchToAddPhotoView(modal));
 }

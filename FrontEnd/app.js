@@ -280,18 +280,64 @@ function switchToAddPhotoView(modal) {
   existingH3.forEach(h3 => h3.remove());
 
   modalBody.innerHTML = `
-    <h3>Ajout photo</h3>
+    <div class="modal-header">
+      <span class="back-arrow"><i class="fas fa-arrow-left"></i></span>
+      <h3>Ajout photo</h3>
+    </div>
     <form id="add-photo-form">
-      <input type="file" id="photo-upload" accept="image/*">
-      <input type="text" id="photo-title" placeholder="Titre">
-      <input type="text" id="photo-category" placeholder="Catégorie">
-      <button type="submit">Valider</button>
+      <div class="upload-container">
+        <label for="photo-upload" class="upload-label">
+          <i class="fas fa-image"></i>
+          <span>+ Ajouter photo</span>
+          <p>jpg, png : 4mo max</p>
+        </label>
+        <input type="file" id="photo-upload" accept="image/*">
+      </div>
+      <div class="form-group">
+        <label for="photo-title">Titre</label>
+        <input type="text" id="photo-title">
+      </div>
+      <div class="form-group">
+        <label for="photo-category">Catégorie</label>
+        <select id="photo-category">
+          <option value="" disabled selected></option>
+        </select>
+      </div>
+      <hr class="separator">
+      <button type="submit" id="submit-photo-btn" disabled>Valider</button>
     </form>
-    <button id="back-to-gallery">Retour</button>
   `;
 
-  const backBtn = modalBody.querySelector("#back-to-gallery");
-  backBtn.addEventListener("click", () => switchToGalleryView(modal));
+  // Remplir le menu déroulant avec les catégories
+  const categories = getUniqueCategories(currentWorks);
+  const categorySelect = modalBody.querySelector("#photo-category");
+  categories.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category.id;
+    option.textContent = category.name;
+    categorySelect.appendChild(option);
+  });
+
+  // Gestion de la flèche de retour
+  const backArrow = modalBody.querySelector(".back-arrow");
+  backArrow.addEventListener("click", () => switchToGalleryView(modal));
+
+  // Gestion de la validation du formulaire
+  const form = modalBody.querySelector("#add-photo-form");
+  const fileInput = modalBody.querySelector("#photo-upload");
+  const titleInput = modalBody.querySelector("#photo-title");
+  const submitBtn = modalBody.querySelector("#submit-photo-btn");
+
+  function checkFormValidity() {
+    const hasFile = fileInput.files.length > 0;
+    const hasTitle = titleInput.value.trim() !== "";
+    const hasCategory = categorySelect.value !== "";
+    submitBtn.disabled = !(hasFile && hasTitle && hasCategory);
+  }
+
+  fileInput.addEventListener("change", checkFormValidity);
+  titleInput.addEventListener("input", checkFormValidity);
+  categorySelect.addEventListener("change", checkFormValidity);
 }
 
 function switchToGalleryView(modal) {

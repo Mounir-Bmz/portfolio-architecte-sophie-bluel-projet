@@ -218,6 +218,7 @@ function createModal() {
         <div class="modal-body">
           <h3>Galerie photo</h3>
           <div class="gallery-modal"></div>
+          <hr class="separator">
           <button id="add-photo-btn">Ajouter une photo</button>
         </div>
       </div>
@@ -265,7 +266,7 @@ function displayModalWorks(modal) {
     const figure = document.createElement("figure");
     figure.innerHTML = `
       <img src="${work.imageUrl}" alt="${work.title}">
-      <button class="delete-work" data-id="${work.id}">×</button>
+      <button class="delete-work" data-id="${work.id}"><i class="fas fa-trash-alt"></i></button>
     `;
     galleryModal.appendChild(figure);
   });
@@ -303,6 +304,7 @@ function switchToGalleryView(modal) {
   modalBody.innerHTML = `
     <h3>Galerie photo</h3>
     <div class="gallery-modal"></div>
+    <hr class="separator">
     <button id="add-photo-btn">Ajouter une photo</button>
   `;
   displayModalWorks(modal); // Remplit à nouveau la galerie

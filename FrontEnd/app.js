@@ -364,6 +364,44 @@ function switchToAddPhotoView(modal) {
   fileInput.addEventListener("change", checkFormValidity);
   titleInput.addEventListener("input", checkFormValidity);
   categorySelect.addEventListener("change", checkFormValidity);
+
+  // Gestion de l'envoi du formulaire
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    // Créer un FormData pour envoyer les données
+    const formData = new FormData();
+    formData.append("image", fileInput.files[0]); // Fichier image
+    formData.append("title", titleInput.value); // Titre
+    formData.append("category", categorySelect.value); // Catégorie
+
+    try {
+      const response = await fetch("http://localhost:5678/api/works", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${window.localStorage.getItem("authToken")}`,
+        },
+        body: formData, // Pas besoin de définir Content-Type, fetch le fait automatiquement avec FormData
+      });
+
+      if (response.ok) {
+        const newWork = await response.json();
+        // Ajoute le nouveau travail à currentWorks
+        currentWorks.push(newWork);
+        // Met à jour la galerie principale (page d'accueil)
+        displayWorks(currentWorks);
+        // Ferme la modale
+        modal.classList.remove("show");
+        modal.classList.add("hidden");
+        document.body.classList.remove("no-scroll");
+      } else {
+        alert("Erreur lors de l'ajout du projet");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout :", error);
+      alert("Erreur réseau. Veuillez réessayer.");
+    }
+  });
 }
 
 function switchToGalleryView(modal) {

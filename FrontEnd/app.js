@@ -264,6 +264,41 @@ function displayModalWorks(modal) {
       <button class="delete-work" data-id="${work.id}"><i class="fas fa-trash-alt"></i></button>
     `;
     galleryModal.appendChild(figure);
+
+    // Gestion de la suppression
+    const deleteBtn = figure.querySelector(".delete-work");
+    deleteBtn.addEventListener("click", async () => {
+      // Alerte de confirmation
+      const confirmDelete = confirm(`Vous allez supprimer l'image "${work.title}". Confirmez-vous ?`);
+      if (!confirmDelete) return; // Si l'utilisateur annule, on arrête
+
+      try {
+        const response = await fetch(`http://localhost:5678/api/works/${work.id}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${window.localStorage.getItem("authToken")}`,
+          },
+        });
+
+        if (response.ok) {
+          // Supprime le travail de currentWorks
+          currentWorks = currentWorks.filter(w => w.id !== work.id);
+          // Met à jour la galerie principale (page d'accueil)
+          displayWorks(currentWorks);
+          // Met à jour la modale
+          displayModalWorks(modal);
+          // Ferme la modale
+          modal.classList.remove("show");
+          modal.classList.add("hidden");
+          document.body.classList.remove("no-scroll");
+        } else {
+          alert("Erreur lors de la suppression");
+        }
+      } catch (error) {
+        console.error("Erreur lors de la suppression :", error);
+        alert("Erreur réseau. Veuillez réessayer.");
+      }
+    });
   });
 }
 

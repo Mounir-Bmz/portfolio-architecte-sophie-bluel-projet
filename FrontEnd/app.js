@@ -239,6 +239,7 @@ function createModal() {
     modal.classList.remove("show");
     modal.classList.add("hidden");
     document.body.classList.remove("no-scroll");
+    switchToGalleryView(modal);
   });
 
   modal.addEventListener("click", (e) => {
@@ -246,6 +247,7 @@ function createModal() {
       modal.classList.remove("show");
       modal.classList.add("hidden");
       document.body.classList.remove("no-scroll");
+      switchToGalleryView(modal);
     }
   });
 
@@ -280,20 +282,18 @@ function displayModalWorks(modal) {
           },
         });
 
-        if (response.ok) {
-          // Supprime le travail de currentWorks
-          currentWorks = currentWorks.filter(w => w.id !== work.id);
-          // Met à jour la galerie principale (page d'accueil)
-          displayWorks(currentWorks);
-          // Met à jour la modale
-          displayModalWorks(modal);
-          // Ferme la modale
-          modal.classList.remove("show");
-          modal.classList.add("hidden");
-          document.body.classList.remove("no-scroll");
-        } else {
-          alert("Erreur lors de la suppression");
-        }
+        // Supprime le travail de currentWorks
+        currentWorks = currentWorks.filter(w => w.id !== work.id);
+        // Met à jour la galerie principale (page d'accueil)
+        displayWorks(currentWorks);
+        // Met à jour la modale
+        displayModalWorks(modal);
+        // Ferme la modale
+        modal.classList.remove("show");
+        modal.classList.add("hidden");
+        document.body.classList.remove("no-scroll");
+        switchToGalleryView(modal);
+        
       } catch (error) {
         console.error("Erreur lors de la suppression :", error);
         alert("Erreur réseau. Veuillez réessayer.");
@@ -317,6 +317,7 @@ function switchToAddPhotoView(modal) {
           <span>+ Ajouter photo</span>
           <p>jpg, png : 4mo max</p>
         </label>
+        <img id="photo-preview" style="display: none;" /> <!-- Élément pour l'aperçu -->
         <input type="file" id="photo-upload" accept="image/*">
       </div>
       <div class="form-group">
@@ -353,6 +354,8 @@ function switchToAddPhotoView(modal) {
   const fileInput = modalBody.querySelector("#photo-upload");
   const titleInput = modalBody.querySelector("#photo-title");
   const submitBtn = modalBody.querySelector("#submit-photo-btn");
+  const uploadLabel = modalBody.querySelector(".upload-label");
+  const photoPreview = modalBody.querySelector("#photo-preview");
 
   function checkFormValidity() {
     const hasFile = fileInput.files.length > 0;
@@ -361,19 +364,28 @@ function switchToAddPhotoView(modal) {
     submitBtn.disabled = !(hasFile && hasTitle && hasCategory);
   }
 
-  fileInput.addEventListener("change", checkFormValidity);
+  // Afficher l'aperçu de l'image quand elle est choisie
+  fileInput.addEventListener("change", (e) => {
+    if (e.target.files && e.target.files[0]) {
+      const imageUrl = URL.createObjectURL(e.target.files[0]);
+      photoPreview.src = imageUrl;
+      photoPreview.style.display = "block"; // Affiche l'image
+      uploadLabel.style.display = "none"; // Cache le label
+      checkFormValidity();
+    }
+  });
+
   titleInput.addEventListener("input", checkFormValidity);
   categorySelect.addEventListener("change", checkFormValidity);
 
   // Gestion de l'envoi du formulaire
   form.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Empêche le rechargement de la page
+    event.preventDefault();
 
-    // Créer un FormData pour envoyer les données
     const formData = new FormData();
-    formData.append("image", fileInput.files[0]); // Fichier image
-    formData.append("title", titleInput.value); // Titre
-    formData.append("category", categorySelect.value); // Catégorie
+    formData.append("image", fileInput.files[0]);
+    formData.append("title", titleInput.value);
+    formData.append("category", categorySelect.value);
 
     try {
       const response = await fetch("http://localhost:5678/api/works", {
@@ -381,22 +393,18 @@ function switchToAddPhotoView(modal) {
         headers: {
           "Authorization": `Bearer ${window.localStorage.getItem("authToken")}`,
         },
-        body: formData, // Pas besoin de définir Content-Type, fetch le fait automatiquement avec FormData
+        body: formData,
       });
 
-      if (response.ok) {
-        const newWork = await response.json();
-        // Ajoute le nouveau travail à currentWorks
-        currentWorks.push(newWork);
-        // Met à jour la galerie principale (page d'accueil)
-        displayWorks(currentWorks);
-        // Ferme la modale
-        modal.classList.remove("show");
-        modal.classList.add("hidden");
-        document.body.classList.remove("no-scroll");
-      } else {
-        alert("Erreur lors de l'ajout du projet");
-      }
+
+      const newWork = await response.json();
+      currentWorks.push(newWork);
+      displayWorks(currentWorks);
+      modal.classList.remove("show");
+      modal.classList.add("hidden");
+      document.body.classList.remove("no-scroll");
+      switchToGalleryView(modal);
+
     } catch (error) {
       console.error("Erreur lors de l'ajout :", error);
       alert("Erreur réseau. Veuillez réessayer.");
